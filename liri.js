@@ -46,6 +46,23 @@ function spotifyThisSong(song) {
 
 }
 
+function omdbDatabase(movie) {
+    axios.get(`http://www.omdbapi.com/?t=${movie}&y=&plot=short&apikey=trilogy`).then(
+        function(response) {
+
+    console.log("The movie's title is: " + response.data.Title);
+    console.log("The movie's release year is: " + response.data.Year);
+    console.log("The movie's iMDB rating is: " + response.data.imdbRating);
+    console.log("The movie's Rotten Tomatoes rating is: " + response.data.Ratings[1].Source);
+    console.log("The movie's country is: " + response.data.Country);
+    console.log("The movie's language is: " + response.data.Language);
+    console.log("The movie's plot is: " + response.data.Plot);
+    console.log("The movie's actors are: " + response.data.Actors);
+  }
+
+);
+}
+
 
 function parseCommand(command, arg) {
     if(command === 'concert-this') {
@@ -55,7 +72,7 @@ function parseCommand(command, arg) {
         spotifyThisSong(arg)
     }
     if(command === 'movie-this') {
-
+        omdbDatabase(arg)
     }
     if(command === 'do-what-it-says') {
         fs.readFile("random.txt", "utf8", function(error, data) {
