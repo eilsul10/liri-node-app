@@ -5,6 +5,7 @@ const keys = require("./keys.js");
 const Spotify = require('node-spotify-api');
 const axios = require('axios')
 const moment = require('moment')
+const fs = require('fs')
  
 const spotify = new Spotify({
   id: keys.spotify.id,
@@ -30,7 +31,6 @@ function spotifyThisSong(song) {
     if(!song) {
         song = 'The Sign'
     }
-    console.log('searching...')
     spotify.search({ type: 'track', query: song }, function(err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
@@ -46,18 +46,28 @@ function spotifyThisSong(song) {
 
 }
 
+
+function parseCommand(command, arg) {
+    if(command === 'concert-this') {
+        searchArtist(arg)
+    }
+    if(command === 'spotify-this-song') {
+        spotifyThisSong(arg)
+    }
+    if(command === 'movie-this') {
+
+    }
+    if(command === 'do-what-it-says') {
+        fs.readFile("random.txt", "utf8", function(error, data) {
+            const args = data.split(',')
+            const parsedCommand = args[0]
+            const arg = args[1]
+            parseCommand(parsedCommand, arg)
+        })
+    }
+
+}
+
 const command = process.argv[2]
-
-if(command === 'concert-this') {
-    searchArtist(process.argv[3])
-}
-if(command === 'spotify-this-song') {
-    spotifyThisSong(process.argv[3])
-}
-if(command === 'movie-this') {
-
-}
-if(command === 'do-what-it-says') {
-
-}
-
+const arg = process.argv[3]
+parseCommand(command, arg)
