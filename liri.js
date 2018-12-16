@@ -23,14 +23,28 @@ function searchArtist(artist) {
         }
     })
 }
-// spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
-//     if (err) {
-//         return console.log('Error occurred: ' + err);
-//     }
-//     console.log(data); 
-// });
 
 // https://rest.bandsintown.com/artists/temptations/events?app_id=codingbootcamp
+
+function spotifyThisSong(song) {
+    if(!song) {
+        song = 'The Sign'
+    }
+    console.log('searching...')
+    spotify.search({ type: 'track', query: song }, function(err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        const song = data.tracks.items[0]
+        for(let i = 0; i < song.artists.length; ++i) {
+            console.log(`Artist: ${song.artists[0].name}`)
+        }
+        console.log(`Song name: ${song.name}`)
+        console.log(`Preview url: ${song.preview_url}`)
+        console.log(`Album: ${song.album.name}`)
+    });
+
+}
 
 const command = process.argv[2]
 
@@ -38,7 +52,7 @@ if(command === 'concert-this') {
     searchArtist(process.argv[3])
 }
 if(command === 'spotify-this-song') {
-
+    spotifyThisSong(process.argv[3])
 }
 if(command === 'movie-this') {
 
